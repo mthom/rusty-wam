@@ -609,7 +609,8 @@ pub struct MachineState {
     pub(super) last_call: bool,
     pub(crate) heap_locs: HeapVarDict,
     pub(crate) flags: MachineFlags,
-    pub(crate) at_end_of_expansion: bool
+    pub(crate) at_end_of_expansion: bool,
+    pub(crate) inferences: Integer,
 }
 
 impl MachineState {
@@ -1219,6 +1220,8 @@ pub(crate) trait CallPolicy: Any + fmt::Debug {
             }
         }
 
+        machine_st.inferences += 1;
+
         Ok(())
     }
 
@@ -1248,6 +1251,8 @@ pub(crate) trait CallPolicy: Any + fmt::Debug {
                 machine_st.execute_at_index(arity, LocalCodePtr::InSituDirEntry(p));
             }
         }
+
+        machine_st.inferences += 1;
 
         Ok(())
     }
